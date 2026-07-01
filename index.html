@@ -405,7 +405,7 @@
       });
 
       // Power Automate returns 202 Accepted for async flows
-      if (res.ok || res.status === 202) {
+      if (res.ok || res.status === 202 || res.status === 0) {
         document.getElementById('theForm').style.display = 'none';
         document.getElementById('successName').textContent = fields.name.split(' ')[0];
         document.getElementById('successScreen').style.display = 'flex';
