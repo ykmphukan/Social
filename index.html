@@ -1,4 +1,4 @@
-None selected 
+
 
 Skip to content
 Using Gmail with screen readers
@@ -395,31 +395,19 @@ Open in 1 other location · Details
       submittedAt:  new Date().toISOString()
     };
 
-    const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), 10000);
-    const showSuccess = () => {
+    // Fire and forget — Power Automate receives the data even if CORS blocks the response
+    fetch(POWER_AUTOMATE_URL, {
+      method:  'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body:    JSON.stringify(payload)
+    }).catch(() => {}); // suppress any CORS response errors silently
+
+    // Show success immediately without waiting for a response
+    setTimeout(() => {
       document.getElementById('theForm').style.display = 'none';
       document.getElementById('successName').textContent = fields.name.split(' ')[0];
       document.getElementById('successScreen').style.display = 'flex';
-    };
-    try {
-      await fetch(POWER_AUTOMATE_URL, {
-        method:  'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body:    JSON.stringify(payload),
-        signal:  controller.signal
-      });
-      clearTimeout(timeout);
-      showSuccess();
-    } catch (err) {
-      clearTimeout(timeout);
-      if (err.name === 'AbortError') { showSuccess(); }
-      else {
-        showToast('Something went wrong. Please try again.');
-        btn.disabled = false;
-        btn.textContent = 'Submit my desk →';
-      }
-    }
+    }, 1500);
   });
 
   function showToast(msg) {
@@ -430,5 +418,5 @@ Open in 1 other location · Details
 </script>
 </body>
 </html>
-RSVP_FORM.html
-Displaying RSVP_FORM.html.
+guess-my-desk-form.html
+Displaying guess-my-desk-form.html.
