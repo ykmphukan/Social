@@ -1,176 +1,430 @@
 <!DOCTYPE html>
 <html lang="en">
- <head>
-  <meta charset="utf-8"/>
-  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-  <title>
-   Whose Desk Is It Anyway? — Submit Your Desk
-  </title>
-  <link href="https://fonts.googleapis.com" rel="preconnect"/>
-  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;1,400&amp;family=Inter:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Whose Desk Is It Anyway? — Submit Your Desk</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;1,400&family=Inter:wght@400;500&display=swap" rel="stylesheet" />
   <style>
-   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    :root {      --bg: #F7F6F3;      --surface: #FFFFFF;      --border: #E2E0DA;      --border-strong: #C8C5BC;      --text: #1C1C1A;      --text-muted: #7A7873;      --accent: #0F6CBD;      --accent-bg: #EFF6FC;      --accent-border: #B3D6F0;      --success-bg: #F0FDF4;      --success-border: #86EFAC;      --success-text: #14532D;      --danger: #DC2626;      --radius: 8px;      --font-sans: 'Inter', system-ui, sans-serif;      --font-voice: 'Lora', Georgia, serif;    }
-    body {      font-family: var(--font-sans);      background: var(--bg);      color: var(--text);      min-height: 100vh;      display: flex;      align-items: flex-start;      justify-content: center;      padding: 3rem 1rem 4rem;    }
-    .card {      background: var(--surface);      border: 0.5px solid var(--border);      border-radius: 16px;      padding: 2.5rem 2rem;      width: 100%;      max-width: 520px;    }
-    .eyebrow {      font-size: 11px;      letter-spacing: .1em;      text-transform: uppercase;      color: var(--text-muted);      margin-bottom: .6rem;    }
-    h1 {      font-family: var(--font-voice);      font-size: 26px;      font-weight: 400;      line-height: 1.25;      color: var(--text);      margin-bottom: .4rem;    }
-    .sub {      font-size: 14px;      color: var(--text-muted);      line-height: 1.65;      margin-bottom: 2rem;    }
-    .divider { border: none; border-top: 0.5px solid var(--border); margin: 1.5rem 0; }
-    .row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-    .field { display: flex; flex-direction: column; gap: 5px; margin-bottom: 14px; }
-    label { font-size: 13px; font-weight: 500; color: var(--text-muted); }
-    input[type=text], input[type=email] {      font-family: var(--font-sans);      font-size: 14px;      color: var(--text);      background: var(--surface);      border: 0.5px solid var(--border-strong);      border-radius: var(--radius);      padding: 0 .75rem;      height: 38px;      width: 100%;      outline: none;      transition: border-color .12s, box-shadow .12s;    }
-    input[type=text]:focus, input[type=email]:focus {      border-color: var(--accent);      box-shadow: 0 0 0 3px var(--accent-bg);    }
-    input::placeholder { color: var(--text-muted); }
-    .error { font-size: 12px; color: var(--danger); display: none; }
-    .upload-zone {      border: 1.5px dashed var(--border-strong);      border-radius: 12px;      padding: 2rem 1rem;      text-align: center;      cursor: pointer;      transition: border-color .15s, background .15s;      background: var(--bg);      position: relative;      min-height: 180px;      display: flex;      align-items: center;      justify-content: center;      flex-direction: column;      margin-bottom: 6px;    }
-    .upload-zone:hover, .upload-zone.drag {      border-color: var(--accent);      background: var(--accent-bg);    }
-    .upload-zone input[type=file] {      position: absolute; inset: 0; opacity: 0;      cursor: pointer; width: 100%; height: 100%;    }
-    .upload-label { font-size: 14px; font-weight: 500; color: var(--text); }    .upload-hint  { font-size: 12px; color: var(--text-muted); margin-top: 4px; }
-    .polaroid-wrap { display: none; flex-direction: column; align-items: center; }
-    .polaroid {      background: #fff;      border: 0.5px solid var(--border);      padding: 8px 8px 28px;      border-radius: 2px;      box-shadow: 2px 4px 12px rgba(0,0,0,.1);      transform: rotate(-2deg);      max-width: 180px;    }
-    .polaroid img { width: 160px; height: 120px; object-fit: cover; display: block; }
-    .polaroid-caption {      font-size: 12px; color: var(--text-muted);      text-align: center; margin-top: 8px;      font-family: var(--font-voice); font-style: italic;    }
-    .change-btn {      background: none; border: none; font-size: 12px;      color: var(--accent); cursor: pointer; padding: 0;      margin-top: .5rem; display: none;    }
-    .change-btn:hover { text-decoration: underline; }
-    .submit-btn {      width: 100%; height: 44px; border-radius: var(--radius);      background: var(--text); color: #fff;      font-family: var(--font-sans); font-size: 15px; font-weight: 500;      border: none; cursor: pointer;      transition: opacity .15s, transform .1s;      margin-top: 1.5rem;    }
-    .submit-btn:hover { opacity: .85; }    .submit-btn:active { transform: scale(.985); }    .submit-btn:disabled { opacity: .5; cursor: default; }
-    .success-screen {      display: none; flex-direction: column; align-items: center;      text-align: center; padding: 2rem 0 1rem; gap: 1rem;    }
-    .success-icon {      width: 52px; height: 52px; border-radius: 50%;      background: var(--success-bg); border: 0.5px solid var(--success-border);      display: flex; align-items: center; justify-content: center; font-size: 22px;    }
-    .success-screen h2 {      font-family: var(--font-voice); font-size: 22px;      font-weight: 400; color: var(--text);    }
-    .success-screen p {      font-size: 14px; color: var(--text-muted);      line-height: 1.6; max-width: 340px;    }
-    .spinner {      display: inline-block; width: 16px; height: 16px;      border: 2px solid rgba(255,255,255,.4); border-top-color: #fff;      border-radius: 50%; animation: spin .7s linear infinite;      vertical-align: middle; margin-right: 6px;    }
-    @keyframes spin { to { transform: rotate(360deg); } }
-    .toast {      position: fixed; bottom: 2rem; left: 50%; transform: translateX(-50%);      background: #1C1C1A; color: #fff; font-size: 13px;      padding: .6rem 1.2rem; border-radius: 999px;      opacity: 0; pointer-events: none; transition: opacity .2s;    }
-    .toast.show { opacity: 1; }
-    @media (max-width: 480px) {      .row-2 { grid-template-columns: 1fr; }      .card { padding: 1.75rem 1.25rem; }    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #F7F6F3;
+      --surface: #FFFFFF;
+      --border: #E2E0DA;
+      --border-strong: #C8C5BC;
+      --text: #1C1C1A;
+      --text-muted: #7A7873;
+      --accent: #0F6CBD;
+      --accent-bg: #EFF6FC;
+      --accent-border: #B3D6F0;
+      --success-bg: #F0FDF4;
+      --success-border: #86EFAC;
+      --success-text: #14532D;
+      --danger: #DC2626;
+      --radius: 8px;
+      --font-sans: 'Inter', system-ui, sans-serif;
+      --font-voice: 'Lora', Georgia, serif;
+    }
+
+    body {
+      font-family: var(--font-sans);
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      padding: 3rem 1rem 4rem;
+    }
+
+    .card {
+      background: var(--surface);
+      border: 0.5px solid var(--border);
+      border-radius: 16px;
+      padding: 2.5rem 2rem;
+      width: 100%;
+      max-width: 520px;
+    }
+
+    .eyebrow {
+      font-size: 11px;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: .6rem;
+    }
+
+    h1 {
+      font-family: var(--font-voice);
+      font-size: 26px;
+      font-weight: 400;
+      line-height: 1.25;
+      color: var(--text);
+      margin-bottom: .4rem;
+    }
+
+    .sub {
+      font-size: 14px;
+      color: var(--text-muted);
+      line-height: 1.65;
+      margin-bottom: 2rem;
+    }
+
+    .divider { border: none; border-top: 0.5px solid var(--border); margin: 1.5rem 0; }
+
+    .row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+    .field { display: flex; flex-direction: column; gap: 5px; margin-bottom: 14px; }
+
+    label { font-size: 13px; font-weight: 500; color: var(--text-muted); }
+
+    input[type=text], input[type=email] {
+      font-family: var(--font-sans);
+      font-size: 14px;
+      color: var(--text);
+      background: var(--surface);
+      border: 0.5px solid var(--border-strong);
+      border-radius: var(--radius);
+      padding: 0 .75rem;
+      height: 38px;
+      width: 100%;
+      outline: none;
+      transition: border-color .12s, box-shadow .12s;
+    }
+
+    input[type=text]:focus, input[type=email]:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px var(--accent-bg);
+    }
+
+    input::placeholder { color: var(--text-muted); }
+
+    .error { font-size: 12px; color: var(--danger); display: none; }
+
+    .upload-zone {
+      border: 1.5px dashed var(--border-strong);
+      border-radius: 12px;
+      padding: 2rem 1rem;
+      text-align: center;
+      cursor: pointer;
+      transition: border-color .15s, background .15s;
+      background: var(--bg);
+      position: relative;
+      min-height: 180px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      margin-bottom: 6px;
+    }
+
+    .upload-zone:hover, .upload-zone.drag {
+      border-color: var(--accent);
+      background: var(--accent-bg);
+    }
+
+    .upload-zone input[type=file] {
+      position: absolute; inset: 0; opacity: 0;
+      cursor: pointer; width: 100%; height: 100%;
+    }
+
+    .upload-label { font-size: 14px; font-weight: 500; color: var(--text); }
+    .upload-hint  { font-size: 12px; color: var(--text-muted); margin-top: 4px; }
+
+    .polaroid-wrap { display: none; flex-direction: column; align-items: center; }
+
+    .polaroid {
+      background: #fff;
+      border: 0.5px solid var(--border);
+      padding: 8px 8px 28px;
+      border-radius: 2px;
+      box-shadow: 2px 4px 12px rgba(0,0,0,.1);
+      transform: rotate(-2deg);
+      max-width: 180px;
+    }
+
+    .polaroid img { width: 160px; height: 120px; object-fit: cover; display: block; }
+
+    .polaroid-caption {
+      font-size: 12px; color: var(--text-muted);
+      text-align: center; margin-top: 8px;
+      font-family: var(--font-voice); font-style: italic;
+    }
+
+    .change-btn {
+      background: none; border: none; font-size: 12px;
+      color: var(--accent); cursor: pointer; padding: 0;
+      margin-top: .5rem; display: none;
+    }
+
+    .change-btn:hover { text-decoration: underline; }
+
+    .submit-btn {
+      width: 100%; height: 44px; border-radius: var(--radius);
+      background: var(--text); color: #fff;
+      font-family: var(--font-sans); font-size: 15px; font-weight: 500;
+      border: none; cursor: pointer;
+      transition: opacity .15s, transform .1s;
+      margin-top: 1.5rem;
+    }
+
+    .submit-btn:hover { opacity: .85; }
+    .submit-btn:active { transform: scale(.985); }
+    .submit-btn:disabled { opacity: .5; cursor: default; }
+
+    .success-screen {
+      display: none; flex-direction: column; align-items: center;
+      text-align: center; padding: 2rem 0 1rem; gap: 1rem;
+    }
+
+    .success-icon {
+      width: 52px; height: 52px; border-radius: 50%;
+      background: var(--success-bg); border: 0.5px solid var(--success-border);
+      display: flex; align-items: center; justify-content: center; font-size: 22px;
+    }
+
+    .success-screen h2 {
+      font-family: var(--font-voice); font-size: 22px;
+      font-weight: 400; color: var(--text);
+    }
+
+    .success-screen p {
+      font-size: 14px; color: var(--text-muted);
+      line-height: 1.6; max-width: 340px;
+    }
+
+    .spinner {
+      display: inline-block; width: 16px; height: 16px;
+      border: 2px solid rgba(255,255,255,.4); border-top-color: #fff;
+      border-radius: 50%; animation: spin .7s linear infinite;
+      vertical-align: middle; margin-right: 6px;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .toast {
+      position: fixed; bottom: 2rem; left: 50%; transform: translateX(-50%);
+      background: #1C1C1A; color: #fff; font-size: 13px;
+      padding: .6rem 1.2rem; border-radius: 999px;
+      opacity: 0; pointer-events: none; transition: opacity .2s;
+    }
+
+    .toast.show { opacity: 1; }
+
+    @media (max-width: 480px) {
+      .row-2 { grid-template-columns: 1fr; }
+      .card { padding: 1.75rem 1.25rem; }
+    }
   </style>
- </head>
- <body>
-  <div class="card">
-   <!-- FORM -->
-   <div id="theForm">
-    <p class="eyebrow">
-     Social Connect — July Edition
-    </p>
-    <h1>
-     Whose desk is it anyway?
-    </h1>
-    <p class="sub">
-     Submit your work desk photo. At the event we'll guess whose is whose — the messier the better.
-    </p>
+</head>
+<body>
+<div class="card">
+
+  <!-- FORM -->
+  <div id="theForm">
+    <p class="eyebrow">🎮 Social Connect — July Edition</p>
+    <h1>Whose desk is it anyway?</h1>
+    <p class="sub">Submit your work desk photo. At the event we'll guess whose is whose — the messier the better.</p>
+
     <div class="row-2">
-     <div class="field">
-      <label for="fname">
-       Your name
-      </label>
-      <input autocomplete="name" id="fname" placeholder="Alex Chen" type="text"/>
-      <span class="error" id="err-name">
-       Enter your name.
-      </span>
-     </div>
-     <div class="field">
-      <label for="fteam">
-       Team
-      </label>
-      <input id="fteam" placeholder="Design, Eng, etc." type="text"/>
-      <span class="error" id="err-team">
-       Enter your team.
-      </span>
-     </div>
-    </div>
-    <div class="field">
-     <label for="femail">
-      Email
-     </label>
-     <input autocomplete="email" id="femail" placeholder="you@company.com" type="email"/>
-     <span class="error" id="err-email">
-      Enter a valid email.
-     </span>
-    </div>
-    <hr class="divider"/>
-    <div class="field">
-     <label>
-      Your desk photo
-     </label>
-     <div class="upload-zone" id="dropZone">
-      <input accept="image/*" aria-label="Upload your desk photo" id="photoInput" type="file"/>
-      <div id="uploadPrompt">
-       <div style="font-size:30px;margin-bottom:.5rem">
-       </div>
-       <p class="upload-label">
-        Drop a photo or click to browse
-       </p>
-       <p class="upload-hint">
-        JPG, PNG or HEIC · max 10 MB
-       </p>
+      <div class="field">
+        <label for="fname">Your name</label>
+        <input type="text" id="fname" placeholder="Alex Chen" autocomplete="name" />
+        <span class="error" id="err-name">Enter your name.</span>
       </div>
-      <div class="polaroid-wrap" id="polaroidWrap">
-       <div class="polaroid">
-        <img alt="Your desk" id="previewImg" src=""/>
-       </div>
-       <p class="polaroid-caption" id="polaroidName">
-        my desk
-       </p>
+      <div class="field">
+        <label for="fteam">Team</label>
+        <input type="text" id="fteam" placeholder="Design, Eng, etc." />
+        <span class="error" id="err-team">Enter your team.</span>
       </div>
-     </div>
-     <span class="error" id="err-photo">
-      Add a photo of your desk.
-     </span>
-     <button class="change-btn" id="changeBtn" type="button">
-      Choose a different photo
-     </button>
     </div>
+
     <div class="field">
-     <label for="fnote" style="display:flex;align-items:center;gap:6px">
-      A subtle clue
-      <span style="font-size:11px;font-weight:400;color:#AAA8A2">
-       (optional)
-      </span>
-     </label>
-     <input id="fnote" placeholder="e.g. There's a suspiciously tall stack of sticky notes" type="text"/>
+      <label for="femail">Email</label>
+      <input type="email" id="femail" placeholder="you@company.com" autocomplete="email" />
+      <span class="error" id="err-email">Enter a valid email.</span>
     </div>
-    <button class="submit-btn" id="submitBtn" type="button">
-     Submit my desk →
-    </button>
-   </div>
-   <!-- SUCCESS -->
-   <div class="success-screen" id="successScreen">
-    <div class="success-icon">
+
+    <hr class="divider" />
+
+    <div class="field">
+      <label>Your desk photo</label>
+      <div class="upload-zone" id="dropZone">
+        <input type="file" id="photoInput" accept="image/*" aria-label="Upload your desk photo" />
+        <div id="uploadPrompt">
+          <div style="font-size:30px;margin-bottom:.5rem">📸</div>
+          <p class="upload-label">Drop a photo or click to browse</p>
+          <p class="upload-hint">JPG, PNG or HEIC · max 10 MB</p>
+        </div>
+        <div class="polaroid-wrap" id="polaroidWrap">
+          <div class="polaroid">
+            <img id="previewImg" src="" alt="Your desk" />
+          </div>
+          <p class="polaroid-caption" id="polaroidName">my desk 📎</p>
+        </div>
+      </div>
+      <span class="error" id="err-photo">Add a photo of your desk.</span>
+      <button class="change-btn" id="changeBtn" type="button">Choose a different photo</button>
     </div>
-    <h2>
-     You're in,
-     <span id="successName">
-      friend
-     </span>
-     !
-    </h2>
-    <p>
-     Your desk is under wraps until game day. We'll send the game link to your email.
-    </p>
-   </div>
+
+    <div class="field">
+      <label for="fnote" style="display:flex;align-items:center;gap:6px">
+        A subtle clue <span style="font-size:11px;font-weight:400;color:#AAA8A2">(optional)</span>
+      </label>
+      <input type="text" id="fnote" placeholder="e.g. There's a suspiciously tall stack of sticky notes" />
+    </div>
+
+    <button class="submit-btn" id="submitBtn" type="button">Submit my desk →</button>
   </div>
-  <div class="toast" id="toast">
+
+  <!-- SUCCESS -->
+  <div class="success-screen" id="successScreen">
+    <div class="success-icon">✅</div>
+    <h2>You're in, <span id="successName">friend</span>!</h2>
+    <p>Your desk is under wraps until game day. We'll send the game link to your email.</p>
   </div>
-  <script>
-   // ─────────────────────────────────────────────────────────────────  // CONFIGURATION — paste your Power Automate HTTP trigger URL here  // ─────────────────────────────────────────────────────────────────  const POWER_AUTOMATE_URL = 'https://defaultc0bd3319c6f848e995ff112a47c538.b7.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/4104b2d52fd948e4ba9543be353e9905/triggers/manual/paths/invoke?api-version=1';  // ─────────────────────────────────────────────────────────────────
-  let photoFile   = null;  let photoBase64 = null;
-  const dropZone     = document.getElementById('dropZone');  const photoInput   = document.getElementById('photoInput');  const uploadPrompt = document.getElementById('uploadPrompt');  const polaroidWrap = document.getElementById('polaroidWrap');  const previewImg   = document.getElementById('previewImg');  const polaroidName = document.getElementById('polaroidName');  const changeBtn    = document.getElementById('changeBtn');
-  photoInput.addEventListener('change', e => {    const f = e.target.files[0];    if (f) loadPhoto(f);  });
-  dropZone.addEventListener('dragover', e => { e.preventDefault(); dropZone.classList.add('drag'); });  dropZone.addEventListener('dragleave', () => dropZone.classList.remove('drag'));  dropZone.addEventListener('drop', e => {    e.preventDefault(); dropZone.classList.remove('drag');    const f = e.dataTransfer.files[0];    if (f && f.type.startsWith('image/')) loadPhoto(f);  });
-  function loadPhoto(file) {    if (file.size > 10 * 1024 * 1024) { showToast('Photo must be under 10 MB.'); return; }    photoFile = file;    const reader = new FileReader();    reader.onload = ev => {      photoBase64 = ev.target.result;      previewImg.src = photoBase64;      const name = document.getElementById('fname').value;      polaroidName.textContent = name ? name + "'s desk " : 'my desk ';      uploadPrompt.style.display = 'none';      polaroidWrap.style.display = 'flex';      photoInput.style.pointerEvents = 'none';      changeBtn.style.display = 'inline';      document.getElementById('err-photo').style.display = 'none';    };    reader.readAsDataURL(file);  }
-  changeBtn.addEventListener('click', () => {    photoInput.value = ''; photoFile = null; photoBase64 = null;    previewImg.src = '';    uploadPrompt.style.display = '';    polaroidWrap.style.display = 'none';    photoInput.style.pointerEvents = '';    changeBtn.style.display = 'none';  });
-  document.getElementById('fname').addEventListener('input', () => {    const n = document.getElementById('fname').value;    if (photoBase64) polaroidName.textContent = n ? n + "'s desk " : 'my desk ';  });
-  function validate() {    const name  = document.getElementById('fname').value.trim();    const team  = document.getElementById('fteam').value.trim();    const email = document.getElementById('femail').value.trim();    const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);    let ok = true;
-    const show = (id, bad) => {      document.getElementById(id).style.display = bad ? 'block' : 'none';      if (bad) ok = false;    };    show('err-name',  !name);    show('err-team',  !team);    show('err-email', !emailOk);    show('err-photo', !photoBase64);    return ok ? { name, team, email } : null;  }
-  document.getElementById('submitBtn').addEventListener('click', async () => {    const fields = validate();    if (!fields) return;
-    const btn = document.getElementById('submitBtn');    btn.disabled = true;    btn.innerHTML = '<span class="spinner"></span> Submitting…';
-    // Strip the data:image/...;base64, prefix — Power Automate expects raw base64    const rawBase64   = photoBase64.replace(/^data:image\/\w+;base64,/, '');    const mimeMatch   = photoBase64.match(/^data:(image\/\w+);base64,/);    const mimeType    = mimeMatch ? mimeMatch[1] : 'image/jpeg';    const ext         = mimeType.split('/')[1] || 'jpg';    const safeAuthor  = fields.name.replace(/[^a-zA-Z0-9 ]/g, '');    const date        = new Date().toISOString().slice(0, 10);    const fileName    = `${safeAuthor} - ${date}.${ext}`;
-    const payload = {      name:         fields.name,      team:         fields.team,      email:        fields.email,      note:         document.getElementById('fnote').value.trim(),      photoBase64:  rawBase64,     // raw base64, no data-URL prefix      mimeType:     mimeType,      fileName:     fileName,      submittedAt:  new Date().toISOString()    };
-    try {      const res = await fetch(POWER_AUTOMATE_URL, {        method:  'POST',        headers: { 'Content-Type': 'application/json' },        body:    JSON.stringify(payload)      });
-      // Power Automate returns 202 Accepted for async flows      if (res.ok || res.status === 202) {        document.getElementById('theForm').style.display = 'none';        document.getElementById('successName').textContent = fields.name.split(' ')[0];        document.getElementById('successScreen').style.display = 'flex';      } else {        throw new Error(`Server responded with ${res.status}`);      }    } catch (err) {      showToast('Something went wrong. Please try again.');      btn.disabled = false;      btn.textContent = 'Submit my desk →';    }  });
-  function showToast(msg) {    const t = document.getElementById('toast');    t.textContent = msg; t.classList.add('show');    setTimeout(() => t.classList.remove('show'), 3000);  }
-  </script>
- </body>
+
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+  // ─────────────────────────────────────────────────────────────────
+  // 🔧 CONFIGURATION — paste your Power Automate HTTP trigger URL here
+  // ─────────────────────────────────────────────────────────────────
+  const POWER_AUTOMATE_URL = 'https://defaultc0bd3319c6f848e995ff112a47c538.b7.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/4104b2d52fd948e4ba9543be353e9905/triggers/manual/paths/invoke?api-version=1';
+  // ─────────────────────────────────────────────────────────────────
+
+  let photoFile   = null;
+  let photoBase64 = null;
+
+  const dropZone     = document.getElementById('dropZone');
+  const photoInput   = document.getElementById('photoInput');
+  const uploadPrompt = document.getElementById('uploadPrompt');
+  const polaroidWrap = document.getElementById('polaroidWrap');
+  const previewImg   = document.getElementById('previewImg');
+  const polaroidName = document.getElementById('polaroidName');
+  const changeBtn    = document.getElementById('changeBtn');
+
+  photoInput.addEventListener('change', e => {
+    const f = e.target.files[0];
+    if (f) loadPhoto(f);
+  });
+
+  dropZone.addEventListener('dragover', e => { e.preventDefault(); dropZone.classList.add('drag'); });
+  dropZone.addEventListener('dragleave', () => dropZone.classList.remove('drag'));
+  dropZone.addEventListener('drop', e => {
+    e.preventDefault(); dropZone.classList.remove('drag');
+    const f = e.dataTransfer.files[0];
+    if (f && f.type.startsWith('image/')) loadPhoto(f);
+  });
+
+  function loadPhoto(file) {
+    if (file.size > 10 * 1024 * 1024) { showToast('Photo must be under 10 MB.'); return; }
+    photoFile = file;
+    const reader = new FileReader();
+    reader.onload = ev => {
+      photoBase64 = ev.target.result;
+      previewImg.src = photoBase64;
+      const name = document.getElementById('fname').value;
+      polaroidName.textContent = name ? name + "'s desk 📎" : 'my desk 📎';
+      uploadPrompt.style.display = 'none';
+      polaroidWrap.style.display = 'flex';
+      photoInput.style.pointerEvents = 'none';
+      changeBtn.style.display = 'inline';
+      document.getElementById('err-photo').style.display = 'none';
+    };
+    reader.readAsDataURL(file);
+  }
+
+  changeBtn.addEventListener('click', () => {
+    photoInput.value = ''; photoFile = null; photoBase64 = null;
+    previewImg.src = '';
+    uploadPrompt.style.display = '';
+    polaroidWrap.style.display = 'none';
+    photoInput.style.pointerEvents = '';
+    changeBtn.style.display = 'none';
+  });
+
+  document.getElementById('fname').addEventListener('input', () => {
+    const n = document.getElementById('fname').value;
+    if (photoBase64) polaroidName.textContent = n ? n + "'s desk 📎" : 'my desk 📎';
+  });
+
+  function validate() {
+    const name  = document.getElementById('fname').value.trim();
+    const team  = document.getElementById('fteam').value.trim();
+    const email = document.getElementById('femail').value.trim();
+    const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    let ok = true;
+
+    const show = (id, bad) => {
+      document.getElementById(id).style.display = bad ? 'block' : 'none';
+      if (bad) ok = false;
+    };
+    show('err-name',  !name);
+    show('err-team',  !team);
+    show('err-email', !emailOk);
+    show('err-photo', !photoBase64);
+    return ok ? { name, team, email } : null;
+  }
+
+  document.getElementById('submitBtn').addEventListener('click', async () => {
+    const fields = validate();
+    if (!fields) return;
+
+    const btn = document.getElementById('submitBtn');
+    btn.disabled = true;
+    btn.innerHTML = '<span class="spinner"></span> Submitting…';
+
+    // Strip the data:image/...;base64, prefix — Power Automate expects raw base64
+    const rawBase64   = photoBase64.replace(/^data:image\/\w+;base64,/, '');
+    const mimeMatch   = photoBase64.match(/^data:(image\/\w+);base64,/);
+    const mimeType    = mimeMatch ? mimeMatch[1] : 'image/jpeg';
+    const ext         = mimeType.split('/')[1] || 'jpg';
+    const safeAuthor  = fields.name.replace(/[^a-zA-Z0-9 ]/g, '');
+    const date        = new Date().toISOString().slice(0, 10);
+    const fileName    = `${safeAuthor} - ${date}.${ext}`;
+
+    const payload = {
+      name:         fields.name,
+      team:         fields.team,
+      email:        fields.email,
+      note:         document.getElementById('fnote').value.trim(),
+      photoBase64:  rawBase64,     // raw base64, no data-URL prefix
+      mimeType:     mimeType,
+      fileName:     fileName,
+      submittedAt:  new Date().toISOString()
+    };
+
+    try {
+      const res = await fetch(POWER_AUTOMATE_URL, {
+        method:  'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body:    JSON.stringify(payload)
+      });
+
+      // Power Automate returns 202 Accepted for async flows
+      if (res.ok || res.status === 202) {
+        document.getElementById('theForm').style.display = 'none';
+        document.getElementById('successName').textContent = fields.name.split(' ')[0];
+        document.getElementById('successScreen').style.display = 'flex';
+      } else {
+        throw new Error(`Server responded with ${res.status}`);
+      }
+    } catch (err) {
+      showToast('Something went wrong. Please try again.');
+      btn.disabled = false;
+      btn.textContent = 'Submit my desk →';
+    }
+  });
+
+  function showToast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg; t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 3000);
+  }
+</script>
+</body>
 </html>
