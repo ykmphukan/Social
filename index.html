@@ -228,7 +228,7 @@
     <h1>Whose desk is it anyway?</h1>
     <p class="sub">Submit your work desk photo. At the event we'll guess whose is whose — the messier the better.</p>
 
-      <div class="field"> style = "width:100%">
+      <div class="field" style = "width:100%">
         <label for="fname">Your name</label>
         <input type="text" id="fname" placeholder="Shawn Michaels" autocomplete="name" />
         <span class="error" id="err-name">Enter your name.</span>
@@ -367,7 +367,7 @@
 
   function validate() {
     const name  = document.getElementById('fname').value.trim();
-    const team  = document.getElementById('fteam').value.trim();
+    // const team  = document.getElementById('fteam').value.trim();
     const email = document.getElementById('femail').value.trim();
     const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
     let ok = true;
@@ -377,10 +377,10 @@
       if (bad) ok = false;
     };
     show('err-name',  !name);
-    show('err-team',  !team);
+    // show('err-team',  !team);
     show('err-email', !emailOk);
     show('err-photo', !photoBase64);
-    return ok ? { name, team, email } : null;
+    return ok ? { name, email } : null;
   }
 
   document.getElementById('submitBtn').addEventListener('click', async () => {
@@ -402,7 +402,7 @@
 
     const payload = {
       name:         fields.name,
-      team:         fields.team,
+      // team:         fields.team,
       email:        fields.email,
       note:         document.getElementById('fnote').value.trim(),
       photoBase64:  rawBase64,     // raw base64, no data-URL prefix
