@@ -321,11 +321,23 @@
   });
 
   function loadPhoto(file) {
-    if (file.size > 10 * 1024 * 1024) { showToast('Photo must be under 10 MB.'); return; }
-    photoFile = file;
-    const reader = new FileReader();
-    reader.onload = ev => {
-      photoBase64 = ev.target.result;
+  if (file.size > 10 * 1024 * 1024) { showToast('Photo must be under 10 MB.'); return; }
+  photoFile = file;
+
+  const img = new Image();
+  const reader = new FileReader();
+
+  reader.onload = ev => {
+    img.onload = () => {
+      // Compress: resize to max 800px wide, quality 0.7
+      const canvas = document.createElement('canvas');
+      const maxW = 800;
+      const scale = Math.min(1, maxW / img.width);
+      canvas.width  = img.width  * scale;
+      canvas.height = img.height * scale;
+      canvas.getContext('2d').drawImage(img, 0, 0, canvas.width, canvas.height);
+      photoBase64 = canvas.toDataURL('image/jpeg', 0.7);
+
       previewImg.src = photoBase64;
       const name = document.getElementById('fname').value;
       polaroidName.textContent = name ? name + "'s desk 📎" : 'my desk 📎';
@@ -335,7 +347,9 @@
       changeBtn.style.display = 'inline';
       document.getElementById('err-photo').style.display = 'none';
     };
-    reader.readAsDataURL(file);
+    img.src = ev.target.result;
+  };
+  reader.readAsDataURL(file);
   }
 
   changeBtn.addEventListener('click', () => {
@@ -401,6 +415,7 @@
     try {
       const res = await fetch(POWER_AUTOMATE_URL, {
         method:  'POST',
+        headers: { 'Content-Type': 'application/json' },
         body:    JSON.stringify(payload)
       });
 
