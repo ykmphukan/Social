@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title> Social Connect - RSVP </title>
+  <title>Social Connect - RSVP</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;1,400&family=Inter:wght@400;500&display=swap" rel="stylesheet" />
   <style>
@@ -177,10 +177,16 @@
       text-align: center; padding: 2rem 0 1rem; gap: 1rem;
     }
 
+    /* UPDATED: modern success icon with pop-in animation */
     .success-icon {
-      width: 52px; height: 52px; border-radius: 50%;
-      background: var(--success-bg); border: 0.5px solid var(--success-border);
-      display: flex; align-items: center; justify-content: center; font-size: 22px;
+      width: 56px; height: 56px; border-radius: 50%;
+      background: var(--success-bg); border: 1.5px solid var(--success-border);
+      display: flex; align-items: center; justify-content: center;
+      animation: popIn .4s cubic-bezier(.175,.885,.32,1.275) both;
+    }
+    @keyframes popIn {
+      0%   { transform: scale(0.5); opacity: 0; }
+      100% { transform: scale(1);   opacity: 1; }
     }
 
     .success-screen h2 {
@@ -244,7 +250,13 @@
       <div class="upload-zone" id="dropZone">
         <input type="file" id="photoInput" accept="image/*" aria-label="Upload your desk photo" />
         <div id="uploadPrompt">
-          <div style="font-size:30px;margin-bottom:.5rem">📸</div>
+          <!-- UPDATED: modern outlined camera SVG icon -->
+          <div style="margin-bottom:.75rem;color:#9CA3AF">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"/>
+              <circle cx="12" cy="13" r="3"/>
+            </svg>
+          </div>
           <p class="upload-label">Drop a photo or click to browse</p>
           <p class="upload-hint">JPG, PNG or HEIC · max 10 MB</p>
         </div>
@@ -271,7 +283,12 @@
 
   <!-- SUCCESS -->
   <div class="success-screen" id="successScreen">
-    <div class="success-icon">✅</div>
+    <!-- UPDATED: modern SVG checkmark with pop-in animation -->
+    <div class="success-icon">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="20 6 9 17 4 12"/>
+      </svg>
+    </div>
     <h2>You're in, <span id="successName">friend</span>!</h2>
     <p>Your desk is under wraps until game day.</p>
   </div>
@@ -280,11 +297,7 @@
 <div class="toast" id="toast"></div>
 
 <script>
-  // ─────────────────────────────────────────────────────────────────
-  // 🔧 CONFIGURATION — paste your Power Automate HTTP trigger URL here
-  // ─────────────────────────────────────────────────────────────────
   const POWER_AUTOMATE_URL = 'https://defaultc0bd3319c6f848e995ff112a47c538.b7.environment.api.powerplatform.com/powerautomate/automations/direct/cu/10/workflows/4104b2d52fd948e4ba9543be353e9905/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=GJPQtSmLfJctLqqD8uxsYiTSwV0Sf6801E5vBwtVHU4';
-  // ─────────────────────────────────────────────────────────────────
 
   let photoFile   = null;
   let photoBase64 = null;
@@ -364,9 +377,8 @@
 
     const btn = document.getElementById('submitBtn');
     btn.disabled = true;
-    btn.innerHTML = '<span class="spinner"></span> Submitting…';
+    btn.innerHTML = '<span class="spinner"></span> Submitting\u2026';
 
-    // Strip the data:image/...;base64, prefix — Power Automate expects raw base64
     const rawBase64   = photoBase64.replace(/^data:image\/\w+;base64,/, '');
     const mimeMatch   = photoBase64.match(/^data:(image\/\w+);base64,/);
     const mimeType    = mimeMatch ? mimeMatch[1] : 'image/jpeg';
@@ -385,14 +397,12 @@
       submittedAt:  new Date().toISOString()
     };
 
-    // Fire and forget — Power Automate receives the data even if CORS blocks the response
     fetch(POWER_AUTOMATE_URL, {
       method:  'POST',
       headers: { 'Content-Type': 'application/json' },
       body:    JSON.stringify(payload)
-    }).catch(() => {}); // suppress any CORS response errors silently
+    }).catch(() => {});
 
-    // Show success immediately without waiting for a response
     setTimeout(() => {
       document.getElementById('theForm').style.display = 'none';
       document.getElementById('successName').textContent = fields.name.split(' ')[0];
