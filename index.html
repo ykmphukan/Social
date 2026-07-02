@@ -402,6 +402,7 @@
     // Fire and forget — Power Automate receives the data even if CORS blocks the response
     fetch(POWER_AUTOMATE_URL, {
       method:  'POST',
+      mode: 'no-cors',
       headers: { 'Content-Type': 'application/json' },
       body:    JSON.stringify(payload)
     }).catch(() => {}); // suppress any CORS response errors silently
